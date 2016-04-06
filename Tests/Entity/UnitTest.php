@@ -22,7 +22,7 @@ class UnitTest extends AbstractAdminWebTestCase
     }
 
     /**
-     * カテゴリ画面のデータ登録、編集
+     * カテゴリ画面のデータ登録、編集 
      */
     public function test_add_category_context()
     {
