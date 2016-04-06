@@ -6,9 +6,9 @@ use Eccube\Tests\Web\Admin\AbstractAdminWebTestCase;
 use Plugin\CategoryContent\Entity\CategoryContent;
 class UnitTest extends AbstractAdminWebTestCase
 {
-    protected  $category_name = 'テストカテゴリ';
-    protected  $category_context_with_id = '<p id="category_context">eccube_test_category</p>';
-    protected  $category_context = 'eccube_test_category';
+    private  $category_name = 'テストカテゴリ';
+    private  $category_context_with_id = '<p id="category_context">eccube_test_category</p>';
+    private  $category_context = 'eccube_test_category';
     /**
      * カテゴリ画面のルーティング
      */
