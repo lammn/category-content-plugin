@@ -6,13 +6,13 @@ use Eccube\Tests\Web\Admin\AbstractAdminWebTestCase;
 use Plugin\CategoryContent\Entity\CategoryContent;
 class UnitTest extends AbstractAdminWebTestCase
 {
-    private  $category_name = 'テストカテゴリ';
-    private  $category_context_with_id = '<p id="category_context">eccube_test_category</p>';
-    private  $category_context = 'eccube_test_category';
+    const CATEGORY_NAME = 'テストカテゴリ';
+    const CATEGORY_CONTEXT_WITH_ID = '<p id="category_context">eccube_test_category</p>';
+    const CATEGORY_CONTEXT = 'eccube_test_category';
     /**
      * カテゴリ画面のルーティング
      */
-    public function test_routing_category()
+    public function testRoutingCategory()
     {
         $this->client->request(
             'GET',
@@ -22,20 +22,20 @@ class UnitTest extends AbstractAdminWebTestCase
     }
 
     /**
-     * カテゴリ画面のデータ登録、編集 
+     * カテゴリ画面のデータ登録、編集
      */
-    public function test_add_category_context()
+    public function testAddCategoryContext()
     {
         //post category context by post
-        $this->category_context_with_post_submit();
+        $this->categoryContextWithPostSubmit();
         $this->assertTrue($this->client->getResponse()->isRedirect($this->app->url('admin_product_category')));
 
         //get context from DB
-        $category_id = $this->app['eccube.repository.category']->findOneBy(array('name' => $this->category_name))->getId();
+        $category_id = $this->app['eccube.repository.category']->findOneBy(array('name' => self::CATEGORY_NAME))->getId();
         $CategoryContent = $this->app['category_content.repository.category_content']->find($category_id);
 
         //compare it
-        $this->expected = $this->category_context_with_id;
+        $this->expected = self::CATEGORY_CONTEXT_WITH_ID;
         $this->actual = $CategoryContent->getContent();
         $this->verify();
     }
@@ -43,16 +43,16 @@ class UnitTest extends AbstractAdminWebTestCase
     /**
      * カテゴリコンテンツの表示チェック
      */
-    public function test_category_context_display()
+    public function testCategoryContextDisplay()
     {
-        $this->category_context_with_post_submit();
-        $category_id = $this->app['eccube.repository.category']->findOneBy(array('name' => $this->category_name))->getId();
+        $this->categoryContextWithPostSubmit();
+        $category_id = $this->app['eccube.repository.category']->findOneBy(array('name' => self::CATEGORY_NAME))->getId();
         $crawler = $this->client->request('GET', $this->app->url('product_list', array('category_id' => $category_id)));
         //redirect test
         $this->assertTrue($this->client->getResponse()->isSuccessful());
 
         //Category context test
-        $this->expected = $this->category_context;
+        $this->expected = self::CATEGORY_CONTEXT;
         $this->actual = $crawler->filter('#category_context')->text();
         $this->verify();
     }
@@ -60,7 +60,7 @@ class UnitTest extends AbstractAdminWebTestCase
     /**
      * カテゴリコンテンツのPOST Submit
      */
-    public function category_context_with_post_submit()
+    public function categoryContextWithPostSubmit()
     {
         //add new category context what have id is 'category_context'
         $crawler = $this->client->request(
@@ -68,8 +68,8 @@ class UnitTest extends AbstractAdminWebTestCase
             $this->app->url('admin_product_category'),
             array('admin_category' => array(
                 '_token' => 'dummy',
-                'name' => $this->category_name,
-                'plg_category_content' => $this->category_context_with_id
+                'name' => self::CATEGORY_NAME,
+                'plg_category_content' => self::CATEGORY_CONTEXT_WITH_ID
             ))
         );
     }
